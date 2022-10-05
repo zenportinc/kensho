@@ -13,8 +13,9 @@ type (
 func assertConstraintWithDataSet(t *testing.T, constraint Constraint, dataSet []constraintCase) {
 	for _, cc := range dataSet {
 		assertConstraintWithContext(t, constraint, &ValidationContext{
-			value: cc.value,
-			arg:   cc.arg,
+			value:         cc.value,
+			arg:           cc.arg,
+			violationList: &ViolationList{},
 		}, cc.expected)
 	}
 }
