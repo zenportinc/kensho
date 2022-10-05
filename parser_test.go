@@ -1,7 +1,7 @@
 package kensho
 
 import (
-	"io/ioutil"
+	"io"
 	"os"
 	"testing"
 )
@@ -12,7 +12,7 @@ func TestJsonParser_Parse(t *testing.T) {
 		panic(err)
 	}
 
-	config, err := ioutil.ReadAll(file)
+	config, err := io.ReadAll(file)
 	if err != nil {
 		panic(err)
 	}

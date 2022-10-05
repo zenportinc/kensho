@@ -91,7 +91,7 @@ func LengthConstraint(ctx *ValidationContext) error {
 
 		return nil
 	default:
-		panic(fmt.Sprintf("expected a slice, map or string value"))
+		panic("expected a slice, map or string value")
 	}
 }
 
@@ -123,7 +123,7 @@ func MinConstraint(ctx *ValidationContext) error {
 
 		return nil
 	default:
-		panic(fmt.Sprintf("expected a slice, map or string value"))
+		panic("expected a slice, map or string value")
 	}
 }
 
@@ -155,6 +155,6 @@ func MaxConstraint(ctx *ValidationContext) error {
 
 		return nil
 	default:
-		panic(fmt.Sprintf("expected a slice, map or string value"))
+		panic("expected a slice, map or string value")
 	}
 }

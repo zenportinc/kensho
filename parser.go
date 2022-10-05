@@ -45,13 +45,13 @@ func parseJSON(config string) ([]*StructMetadata, error) {
 			metadata.Fields[field] = fm
 
 			for i, validator := range validatorList {
-				switch validator.(type) {
+				switch validator := validator.(type) {
 				case string:
 					fm.Constraints[i] = &ConstraintMetadata{
-						Tag: validator.(string),
+						Tag: validator,
 					}
 				case map[string]interface{}:
-					config := validator.(map[string]interface{})
+					config := validator
 					for key, value := range config {
 						fm.Constraints[i] = &ConstraintMetadata{
 							Tag: key,

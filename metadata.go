@@ -2,7 +2,7 @@ package kensho
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -57,7 +57,7 @@ func (validator *Validator) LoadFiles(patterns ...string) error {
 				return err
 			}
 
-			config, err := ioutil.ReadAll(file)
+			config, err := io.ReadAll(file)
 			if err != nil {
 				return err
 			}
