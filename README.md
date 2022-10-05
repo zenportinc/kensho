@@ -1,6 +1,5 @@
 # Kenshō - A Go validator
 
-[![Build Status](https://travis-ci.org/zenportinc/kensho.svg?branch=master)](https://travis-ci.org/zenportinc/kensho)
 [![Coverage Status](https://coveralls.io/repos/github/zenportinc/kensho/badge.svg?branch=master)](https://coveralls.io/github/zenportinc/kensho?branch=master)
 [![Go Report Card](https://goreportcard.com/badge/github.com/zenportinc/kensho)](https://goreportcard.com/report/github.com/zenportinc/kensho)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
