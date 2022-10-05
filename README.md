@@ -1,8 +1,8 @@
 # Kenshō - A Go validator
 
-[![Build Status](https://travis-ci.org/maxperrimond/kensho.svg?branch=master)](https://travis-ci.org/maxperrimond/kensho)
-[![Coverage Status](https://coveralls.io/repos/github/maxperrimond/kensho/badge.svg?branch=master)](https://coveralls.io/github/maxperrimond/kensho?branch=master)
-[![Go Report Card](https://goreportcard.com/badge/github.com/maxperrimond/kensho)](https://goreportcard.com/report/github.com/maxperrimond/kensho)
+[![Build Status](https://travis-ci.org/zenportinc/kensho.svg?branch=master)](https://travis-ci.org/zenportinc/kensho)
+[![Coverage Status](https://coveralls.io/repos/github/zenportinc/kensho/badge.svg?branch=master)](https://coveralls.io/github/zenportinc/kensho?branch=master)
+[![Go Report Card](https://goreportcard.com/badge/github.com/zenportinc/kensho)](https://goreportcard.com/report/github.com/zenportinc/kensho)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 **A *Work in progress* project so the `master` branch might change in the future and BC breaks some part or change some behaviors.**
@@ -11,23 +11,23 @@ A simple Go library for validation, but gives the possibility to validate deeply
 
 ## TODO
 
- - More docs/examples
- - More tests
- - Add validators
+- More docs/examples
+- More tests
+- Add validators
 
 ## Features
 
- - Struct validation
- - Able to add custom constraints
- - Validator argument
- - Configuration from a file (ex: json)
- - Deep validation
- - List of struct validation
- - Translation
+- Struct validation
+- Able to add custom constraints
+- Validator argument
+- Configuration from a file (ex: json)
+- Deep validation
+- List of struct validation
+- Translation
 
 ## Installation
 
-    go get github.com/maxperrimond/kensho
+    go get github.com/zenportinc/kensho
 
 ## Usage
 
@@ -37,75 +37,75 @@ Here some code as an example:
 package main
 
 import (
-	"fmt"
+ "fmt"
 
-	"github.com/maxperrimond/kensho"
+ "github.com/zenportinc/kensho"
 )
 
 type Group struct {
-	Name  string  `valid:"required"`
-	Users []*User `valid:"valid"` // Ask to valid users if there is some
+ Name  string  `valid:"required"`
+ Users []*User `valid:"valid"` // Ask to valid users if there is some
 }
 
 type User struct {
-	Email     string `valid:"required,email"`
-	FirstName string `valid:"required,min=2,max=64"`
-	LastName  string `valid:"required,min=2,max=64"`
+ Email     string `valid:"required,email"`
+ FirstName string `valid:"required,min=2,max=64"`
+ LastName  string `valid:"required,min=2,max=64"`
 }
 
 func main() {
-	// Simple struct
-	user := &User{
-		Email:     "foo.bar@example.com",
-		FirstName: "foo",
-		LastName:  "bar",
-	}
+ // Simple struct
+ user := &User{
+  Email:     "foo.bar@example.com",
+  FirstName: "foo",
+  LastName:  "bar",
+ }
 
-	// Validate user
-	ok, violations, _ := kensho.Validate(user)
+ // Validate user
+ ok, violations, _ := kensho.Validate(user)
 
-	fmt.Printf("Result: %t\n", ok)
-	fmt.Println(violations)
+ fmt.Printf("Result: %t\n", ok)
+ fmt.Println(violations)
 
-	user.Email = "this is not an email"
-	user.FirstName = ""
+ user.Email = "this is not an email"
+ user.FirstName = ""
 
-	// Validate user after inserting bad data
-	ok, violations, _ = kensho.Validate(user)
+ // Validate user after inserting bad data
+ ok, violations, _ = kensho.Validate(user)
 
-	fmt.Printf("Result: %t\n", ok)
-	fmt.Println(violations)
+ fmt.Printf("Result: %t\n", ok)
+ fmt.Println(violations)
 
-	users := []*User{
-		{
-			Email:     "john@example.com",
-			FirstName: "john",
-			LastName:  "bar",
-		},
-		{
-			Email:     "pierre@example.com",
-			FirstName: "pierre",
-			LastName:  "bar",
-		},
-	}
+ users := []*User{
+  {
+   Email:     "john@example.com",
+   FirstName: "john",
+   LastName:  "bar",
+  },
+  {
+   Email:     "pierre@example.com",
+   FirstName: "pierre",
+   LastName:  "bar",
+  },
+ }
 
-	// Validate collection of users
-	ok, violations, _ = kensho.Validate(users)
+ // Validate collection of users
+ ok, violations, _ = kensho.Validate(users)
 
-	fmt.Printf("Result: %t\n", ok)
-	fmt.Println(violations)
+ fmt.Printf("Result: %t\n", ok)
+ fmt.Println(violations)
 
-	// Nested struct
-	group := &Group{
-		Name:  "foo",
-		Users: append(users, user), // With the bad user
-	}
+ // Nested struct
+ group := &Group{
+  Name:  "foo",
+  Users: append(users, user), // With the bad user
+ }
 
-	// Validate the group
-	ok, violations, _ = kensho.Validate(group)
+ // Validate the group
+ ok, violations, _ = kensho.Validate(group)
 
-	fmt.Printf("Result: %t\n", ok)
-	fmt.Println(violations)
+ fmt.Printf("Result: %t\n", ok)
+ fmt.Println(violations)
 }
 ```
 
@@ -133,23 +133,23 @@ And more to come
 package main
 
 import (
-	"context"
-	"errors"
+ "context"
+ "errors"
 
-	"github.com/maxperrimond/kensho"
+ "github.com/zenportinc/kensho"
 )
 
 // Define your constraint
 func poneyConstraint(ctx *kensho.ValidationContext) error {
-	if ctx.Value() != "poney" {
-		ctx.BuildViolation("invalid_poney", nil).AddViolation()
-	}
+ if ctx.Value() != "poney" {
+  ctx.BuildViolation("invalid_poney", nil).AddViolation()
+ }
 
-	return nil
+ return nil
 }
 
 func init() {
-	// add it with the tag of your choice
+ // add it with the tag of your choice
     kensho.AddConstraint("poney", poneyConstraint)
 }
 ```
