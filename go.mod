@@ -1,5 +1,5 @@
-module github.com/maxperrimond/kensho
+module github.com/zenportinc/kensho
 
-go 1.12
+go 1.19
 
-require golang.org/x/text v0.3.0
+require golang.org/x/text v0.3.7
