@@ -23,7 +23,7 @@ jobs:
       - name: Init go environment
         uses: ./.github/actions/init_go
         with:
-          ga_token: ${{ secrets.GA_ACCESS_TOKEN }}
+          ga_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build
         run: make build-go
@@ -36,7 +36,7 @@ jobs:
       - name: Init go environment
         uses: ./.github/actions/init_go
         with:
-          ga_token: ${{ secrets.GA_ACCESS_TOKEN }}
+          ga_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Linter
         run: make linter
@@ -49,7 +49,7 @@ jobs:
       - name: Init go environment
         uses: ./.github/actions/init_go
         with:
-          ga_token: ${{ secrets.GA_ACCESS_TOKEN }}
+          ga_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Run the unit tests
         run: make unit-tests
 

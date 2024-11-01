@@ -22,7 +22,7 @@ jobs:
         id: bump
         with:
           mode: bump
-          repo-token:  ${{ secrets.GA_ACCESS_TOKEN }}
+          repo-token:  ${{ secrets.GITHUB_TOKEN }}
           major-label: major release
           minor-label: minor release
           patch-label: patch release
