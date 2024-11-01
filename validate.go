@@ -24,6 +24,12 @@ func (validator *Validator) ValidateWithContext(ctx context.Context, subject int
 	var violations ViolationList
 	var err error
 
+	defer func() {
+		if r := recover(); r != nil {
+			err = fmt.Errorf("panic recovered in ValidateWithContext: %v", r)
+		}
+	}()
+
 	val := reflect.ValueOf(subject)
 	if val.Kind() == reflect.Interface {
 		val = val.Elem()
