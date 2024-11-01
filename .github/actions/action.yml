@@ -1,0 +1,21 @@
+name: Init go environment
+description: Init a preconfigured go environment with cache
+
+inputs:
+  ga_token:
+    description: 'GithubAction token to access the private modules'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Grant Zenport private modules access
+      shell: bash
+      run: git config --global url."https://zenport-system:${{ inputs.ga_token }}@github.com/zenportinc/".insteadOf "https://github.com/zenportinc/"
+
+    - name: Setup go build environment
+      id: setup_go
+      uses: actions/setup-go@v5
+      with:
+        go-version-file: 'go.mod'
+        cache: true
