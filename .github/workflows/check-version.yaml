@@ -1,9 +1,9 @@
-name: check-version
+name: Check Version
+
 on:
   pull_request:
     types: [labeled, unlabeled, opened, edited, reopened, synchronize, ready_for_review]
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+  workflow_dispatch: # Allow manual execution from the Actions tab
 
 permissions:
   contents: write
@@ -13,13 +13,16 @@ permissions:
 jobs:
   validate-version:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: jefflinse/pr-semver-bump@v1.7.0
-        name: Validate Pull Request Metadata
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Validate Pull Request Metadata
+        uses: jefflinse/pr-semver-bump@v1.7.0
         with:
           mode: validate
-          repo-token: ${{ secrets.GA_ACCESS_TOKEN }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }} # Use the default token
           major-label: major release
           minor-label: minor release
           patch-label: patch release
