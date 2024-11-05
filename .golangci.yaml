@@ -1,0 +1,107 @@
+# https://golangci-lint.run/usage/configuration/
+# To get the list of available linters: ./target/binutil/golangci-lint help linters
+
+run:
+  issues-exit-code: 1
+  tests: true
+  timeout: 5m
+
+output:
+  # colored-line-number|line-number|json|tab|checkstyle|code-climate, default is "colored-line-number"
+  formats:
+    - format: colored-line-number
+
+linters-settings:
+  gocognit:
+    min-complexity: 10
+  gocyclo:
+    min-complexity: 10
+  gofmt:
+    simplify: true
+  misspell:
+    locale: US
+  whitespace:
+    multi-if: false   # Enforces newlines (or comments) after every multi-line if statement
+    multi-func: false # Enforces newlines (or comments) after every multi-line function signature
+  wrapcheck:
+    # An array of strings that specify substrings of signatures to ignore.
+    # If this set, it will override the default set of ignored signatures.
+    # See https://github.com/tomarrell/wrapcheck#configuration for more information.
+    # Default: [".Errorf(", "errors.New(", "errors.Unwrap(", ".Wrap(", ".Wrapf(", ".WithMessage(", ".WithMessagef(", ".WithStack("]
+    ignoreSigs:
+      - .Errorf(
+      - errors.New(
+      - errors.Unwrap(
+      - errors.Join(
+      - .Wrap(
+      - .Wrapf(
+      - .WithMessage(
+      - .WithMessagef(
+      - .WithStack(
+      - errtrace.Trace(
+      - .ValidateStructCtx(
+      - serviceerrors.Handle
+      - endtoend.
+  exhaustive:
+    # Program elements to check for exhaustiveness.
+    # Default: [ switch ]
+    check:
+      - switch
+      - map
+  gomnd:
+    ignored-functions:
+      - 'make'
+
+linters:
+  enable-all: true
+  disable:
+    # Deprecated
+    - execinquery
+    - err113
+    - gomnd
+    - exportloopref
+    # others
+    - contextcheck      # check the function whether use a non-inherited context [fast: false, auto-fix: false]
+    - cyclop            # checks function and package cyclomatic complexity [fast: false, auto-fix: false]
+    - depguard          # Go linter that checks if package imports are in a list of acceptable packages.
+    - exhaustruct       # Checks if all structure fields are initialized [fast # false, auto-fix # false]
+    - funlen            # Tool for detection of long functions [fast: true, auto-fix: false]
+    - godox               # Tool for detection of FIXME, TODO and other comment keywords
+    - ireturn           # Accept Interfaces, Return Concrete Types [fast: false, auto-fix: false]
+    - lll               # Reports long lines [fast: true, auto-fix: false]
+    - nilnil            # Checks that there is no simultaneous return of `nil` error and an invalid value. [fast: false, auto-fix: false]
+    - nlreturn          # nlreturn checks for a new line before return and branch statements to increase code clarity [fast: true, auto-fix: false]
+    - promlinter        # Check Prometheus metrics naming via promlint [fast: true, auto-fix: false]
+    - rowserrcheck      # checks whether Err of rows is checked successfully [fast: false, auto-fix: false]
+    - sqlclosecheck     # Checks that sql.Rows and sql.Stmt are closed. [fast: false, auto-fix: false]
+    - tagliatelle       # Checks the struct tags. [fast: true, auto-fix: false]
+    - tagalign          # Check that struct tags are well aligned.
+    - testpackage       # linter that makes you use a separate _test package [fast: true, auto-fix: false]
+    - varnamelen        # checks that the length of a variable's name matches its scope [fast: false, auto-fix: false]
+    - wastedassign      # (disabled because of generics) wastedassign finds wasted assignment statements. [fast: false, auto-fix: false]
+    - wsl               # Whitespace Linter - Forces you to use empty lines! [fast: true, auto-fix: false]
+    - perfsprint       # Throws a log of "fmt.Errorf can be replaced with errors.New".
+
+issues:
+  exclude-dirs:
+    - .github
+    - .githook
+  exclude-use-default: false
+  exclude-rules:
+    # Exclude some linters from running on tests files.
+    - path: "_test.go"
+      linters:
+        - maintidx
+        - gocognit
+        - gocyclo
+        - goconst
+
+
+  # Maximum issues count per one linter.
+  # Set to 0 to disable.
+  # Default: 50
+  max-issues-per-linter: 0
+  # Maximum count of issues with the same text.
+  # Set to 0 to disable.
+  # Default: 3
+  max-same-issues: 0
