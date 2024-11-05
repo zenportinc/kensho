@@ -1,6 +1,6 @@
 name: Init Go Environment
 description: Initialize a preconfigured Go environment with cache
-# Dummy commit
+
 runs:
   using: "composite"
   steps:
