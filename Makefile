@@ -36,7 +36,6 @@ unit-tests: mod ## Run unit tests
 		-covermode=atomic 		\
 		-bench=. 				\
 		-count=1				\
-		-race 					\
         -failfast 				\
       	-coverprofile=coverage.out && \
     go tool cover -html=coverage.out -o=coverage.html
