@@ -20,9 +20,7 @@ func (validator *Validator) Validate(subject interface{}) (bool, ViolationList, 
 	return validator.ValidateWithContext(context.Background(), subject)
 }
 
-func (validator *Validator) ValidateWithContext(ctx context.Context, subject interface{}) (bool, ViolationList, error) {
-	var violations ViolationList
-	var err error
+func (validator *Validator) ValidateWithContext(ctx context.Context, subject interface{}) (isValid bool, violations ViolationList, err error) {
 
 	defer func() {
 		if r := recover(); r != nil {
@@ -52,7 +50,8 @@ func (validator *Validator) ValidateWithContext(ctx context.Context, subject int
 		return false, nil, err
 	}
 
-	return len(violations) == 0, violations, nil
+	isValid = len(violations) == 0
+	return isValid, violations, nil
 }
 
 func (validator *Validator) validateStruct(ctx context.Context, root interface{}, path string, val reflect.Value) (violations ViolationList, err error) {
