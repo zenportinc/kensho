@@ -1,0 +1,32 @@
+name: Check Version
+
+on:
+  pull_request:
+    types: [labeled, unlabeled, opened, edited, reopened, synchronize, ready_for_review]
+  workflow_dispatch: # Allow manual execution from the Actions tab
+
+permissions:
+  contents: write
+  issues: read
+  pull-requests: read
+
+jobs:
+  validate-version:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Validate Pull Request Metadata
+        uses: jefflinse/pr-semver-bump@v1.7.0
+        with:
+          mode: validate
+          repo-token: ${{ secrets.GITHUB_TOKEN }} # Use the default token
+          major-label: major release
+          minor-label: minor release
+          patch-label: patch release
+          require-release-notes: true
+          release-notes-prefix: ''
+          release-notes-suffix: ''
+          with-v: true
