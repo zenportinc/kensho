@@ -1,6 +1,7 @@
 package kensho
 
 import (
+	"fmt"
 	"regexp"
 )
 
@@ -36,7 +37,7 @@ func validWithRegex(ctx *ValidationContext, pattern string, onViolation func()) 
 func RegexConstraint(ctx *ValidationContext) error {
 	pattern, ok := ctx.Arg().(string)
 	if !ok {
-		panic("the pattern is missing to validate with a regex")
+		return fmt.Errorf("the pattern is missing or invalid to validate with a regex")
 	}
 
 	return validWithRegex(ctx, pattern, func() {

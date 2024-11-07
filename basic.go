@@ -70,28 +70,28 @@ func LengthConstraint(ctx *ValidationContext) error {
 	}
 
 	var length int
-	switch ctx.Arg().(type) {
+	switch v := ctx.Arg().(type) {
 	case int:
-		length = ctx.Arg().(int)
+		length = v
 	case int64:
-		length = int(ctx.Arg().(int64))
+		length = int(v)
 	case float64:
-		length = int(ctx.Arg().(float64))
+		length = int(v)
 	default:
-		panic(fmt.Sprintf("invalid argument to length: %v", ctx.Arg()))
+		return fmt.Errorf("invalid argument to length: expected int, int64, or float64, got %T", v)
 	}
 
-	switch reflect.TypeOf(ctx.Value()).Kind() {
+	val := reflect.ValueOf(ctx.Value())
+	switch val.Kind() {
 	case reflect.String, reflect.Array, reflect.Slice, reflect.Map:
-		if reflect.ValueOf(ctx.Value()).Len() != length {
+		if val.Len() != length {
 			ctx.BuildViolation("invalid_length", map[string]interface{}{
 				"length": length,
 			}).AddViolation()
 		}
-
 		return nil
 	default:
-		panic("expected a slice, map or string value")
+		return fmt.Errorf("expected a slice, map, or string value, got %T", ctx.Value())
 	}
 }
 
@@ -101,20 +101,24 @@ func MinConstraint(ctx *ValidationContext) error {
 	}
 
 	var min int
-	switch ctx.Arg().(type) {
+	switch v := ctx.Arg().(type) {
 	case int:
-		min = ctx.Arg().(int)
+		min = v
 	case int64:
-		min = int(ctx.Arg().(int64))
+		min = int(v)
 	case float64:
-		min = int(ctx.Arg().(float64))
+		min = int(v)
 	default:
-		panic(fmt.Sprintf("invalid argument to min: %v", ctx.Arg()))
+		// Return a descriptive error instead of panicking
+		return fmt.Errorf("invalid argument to min: expected int, int64, or float64, got %T", v)
 	}
 
-	switch reflect.TypeOf(ctx.Value()).Kind() {
+	val := reflect.ValueOf(ctx.Value())
+	switch val.Kind() {
 	case reflect.String, reflect.Array, reflect.Slice, reflect.Map:
-		if length := reflect.ValueOf(ctx.Value()).Len(); length < min {
+
+		length := val.Len()
+		if length < min {
 			ctx.BuildViolation("too_short", map[string]interface{}{
 				"min":    min,
 				"length": length,
@@ -123,7 +127,7 @@ func MinConstraint(ctx *ValidationContext) error {
 
 		return nil
 	default:
-		panic("expected a slice, map or string value")
+		return fmt.Errorf("expected a slice, map, or string value, got %T", ctx.Value())
 	}
 }
 
@@ -133,28 +137,29 @@ func MaxConstraint(ctx *ValidationContext) error {
 	}
 
 	var max int
-	switch ctx.Arg().(type) {
+	switch v := ctx.Arg().(type) {
 	case int:
-		max = ctx.Arg().(int)
+		max = v
 	case int64:
-		max = int(ctx.Arg().(int64))
+		max = int(v)
 	case float64:
-		max = int(ctx.Arg().(float64))
+		max = int(v)
 	default:
-		panic(fmt.Sprintf("invalid argument to max: %v", ctx.Arg()))
+		return fmt.Errorf("invalid argument to max: expected int, int64, or float64, got %T", v)
 	}
 
-	switch reflect.TypeOf(ctx.Value()).Kind() {
+	val := reflect.ValueOf(ctx.Value())
+	switch val.Kind() {
 	case reflect.String, reflect.Array, reflect.Slice, reflect.Map:
-		if length := reflect.ValueOf(ctx.Value()).Len(); length > max {
+		length := val.Len()
+		if length > max {
 			ctx.BuildViolation("too_long", map[string]interface{}{
 				"max":    max,
 				"length": length,
 			}).AddViolation()
 		}
-
 		return nil
 	default:
-		panic("expected a slice, map or string value")
+		return fmt.Errorf("expected a slice, map, or string value, got %T", ctx.Value())
 	}
 }

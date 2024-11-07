@@ -43,7 +43,7 @@ func (validator *Validator) ValidateWithContext(ctx context.Context, subject int
 	case reflect.Struct:
 		violations, err = validator.validateStruct(ctx, subject, "", val)
 	default:
-		panic(fmt.Sprintf("Cannot validate a %T, it must a struct or a list of struct", subject))
+		return false, nil, fmt.Errorf("cannot validate a %T, it must be a struct or a list of struct", subject)
 	}
 
 	if err != nil {
@@ -89,6 +89,7 @@ func (validator *Validator) validateStruct(ctx context.Context, root interface{}
 
 func (validator *Validator) validateList(ctx context.Context, root interface{}, path string, val reflect.Value) (violations ViolationList, err error) {
 	var wg sync.WaitGroup
+	var mu sync.Mutex
 
 	for i := 0; i < val.Len(); i++ {
 		wg.Add(1)
@@ -113,8 +114,12 @@ func (validator *Validator) validateList(ctx context.Context, root interface{}, 
 			case reflect.Struct:
 				itemViolations, itemErr = validator.validateStruct(ctx, root, appendIndex(path, fieldName), itemVal)
 			default:
-				panic(fmt.Sprintf("Cannot validate a %T, it must received a struct or a list of structs", itemVal.Interface()))
+				itemErr = fmt.Errorf("cannot validate a %T, it must be a struct or a list of structs", itemVal.Interface())
 			}
+
+			// Safely append item violations and handle error
+			mu.Lock()
+			defer mu.Unlock()
 
 			if itemErr != nil {
 				err = itemErr
