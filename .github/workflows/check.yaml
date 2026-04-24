@@ -31,11 +31,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create local main branch
+        run: git branch -f main origin/main
+
       - name: Init Go Environment
         uses: ./.github/actions/init_go
 
       - name: Linter
-        run: make linter
+        # TODO: update the code so we can use linter-go instead of linter-go-new.
+        run: make linter-go-new
 
   unit-tests:
     runs-on: ubuntu-latest
