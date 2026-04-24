@@ -26,6 +26,10 @@ format:
 linter: mod ## Run golangci-lint
 	docker compose up --force-recreate --exit-code-from linter linter
 
+.PHONY: linter-go-new
+linter-go-new: mod ## Run golangci-lint for new code only
+	docker compose up --force-recreate --exit-code-from linter-go-new linter-go-new
+
 # Tests
 
 .PHONY: unit-tests

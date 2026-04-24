@@ -9,3 +9,14 @@ services:
       - ~/.cache/golangci-lint/:/root/.cache
     environment:
       GOFLAGS: "-buildvcs=false"
+
+  linter-go-new:
+    profiles: [ "local" ]
+    image: golangci/golangci-lint:v1.61-alpine
+    working_dir: /app
+    command: [ "golangci-lint", "run", "--timeout=10m", "--new-from-rev=main", "--color=always" ]
+    volumes:
+      - .:/app
+      - ~/.cache/golangci-lint/:/root/.cache
+    environment:
+      GOFLAGS: "-buildvcs=false"
