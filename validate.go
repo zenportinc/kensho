@@ -56,6 +56,7 @@ func (validator *Validator) ValidateWithContext(ctx context.Context, subject int
 
 func (validator *Validator) validateStruct(ctx context.Context, root interface{}, path string, val reflect.Value) (violations ViolationList, err error) {
 	var wg sync.WaitGroup
+	var mu sync.Mutex
 
 	sm, err := validator.getStructMetadata(val.Interface())
 	if err != nil {
@@ -74,6 +75,11 @@ func (validator *Validator) validateStruct(ctx context.Context, root interface{}
 			defer wg.Done()
 
 			valueViolations, valueErr := validator.validateValue(ctx, root, appendPath(path, fieldName), val, fieldVal, metadata)
+
+			// Safely append item violations
+			mu.Lock()
+			defer mu.Unlock()
+
 			if valueErr != nil {
 				err = valueErr
 			}
@@ -213,6 +219,7 @@ func (validator *Validator) validateArrayValue(ctx context.Context, root interfa
 	}
 
 	var wg sync.WaitGroup
+	var mu sync.Mutex
 	for i := 0; i < fieldVal.Len(); i++ {
 		wg.Add(1)
 
@@ -220,6 +227,11 @@ func (validator *Validator) validateArrayValue(ctx context.Context, root interfa
 			defer wg.Done()
 
 			valueViolations, valueErr := validator.validateValue(ctx, root, appendIndex(path, fieldName), val, itemVal, itemMetadata)
+
+			// Safely append item violations
+			mu.Lock()
+			defer mu.Unlock()
+
 			if valueErr != nil {
 				err = valueErr
 			}
